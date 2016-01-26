@@ -3,7 +3,7 @@ import os
 
 def generate_image_list(qiniu_base, image_counts):
 	for i in xrange(1, image_counts + 1):
-		yield qiniu_base % i
+		yield (i, qiniu_base % i)
 
 
 def create_markdown_cells(image_list):
@@ -12,14 +12,22 @@ def create_markdown_cells(image_list):
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "![%s](%s)"
+    "##### %d"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "![%d](%s)"
    ]
   },
 	"""
 	ret = ""
-	for image in image_list:
-		seq_no = image[-4:]
-		ret += markdown_cell_template % (seq_no, image)
+	for image_tuple in image_list:
+		seq_no = image_tuple[0]
+		url = image_tuple[1]
+		ret += markdown_cell_template % (seq_no, seq_no, url)
 	return ret
 
 
@@ -72,9 +80,10 @@ def output(path, s):
 
 
 if __name__ == "__main__":
-	qiniu_base_link = "http://7xqhfk.com1.z0.glb.clouddn.com/dlfornlp/lec08/%04d.jpg"
-	image_counts = 34
-	path = "dlfornlp/lec08.ipynb"
+	qiniu_base_link = "http://7xqhfk.com1.z0.glb.clouddn.com/zbml/lec05/%04d.jpg"
+	image_counts = 56
+	# path = "dlfornlp/lec08.ipynb"
+	path = "zbml/lec05-lr.ipynb"
 	qiniu_images = generate_image_list(qiniu_base_link, image_counts)
 	cells = create_markdown_cells(qiniu_images)
 	whole_str = gen_ipynb_str(cells)
@@ -82,6 +91,4 @@ if __name__ == "__main__":
 		output(path, whole_str)
 	else:
 		print "File exists! Not writing file! Check the output path first!"
-
-
 
