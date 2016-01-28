@@ -1,4 +1,6 @@
 import os
+import sys
+import getopt
 
 
 def generate_image_list(qiniu_base, image_counts):
@@ -78,17 +80,28 @@ def output(path, s):
 		f.write(s)
 
 
+def gen_info(course, lec_number):
+	courses = set(["mlfoundations", "zbml", "dlfornlp", "cs231n"])
+	if course not in courses:
+		print "Not a valid course name"
+		exit(1)
+
+	link = "http://7xqhfk.com1.z0.glb.clouddn.com/%s/lec%02d/%%04d.jpg" % (course, lec_number)
+	path = "%s/lec%02d.ipynb" % (course, lec_number)
+	return link, path
 
 if __name__ == "__main__":
-	qiniu_base_link = "http://7xqhfk.com1.z0.glb.clouddn.com/zbml/lec05/%04d.jpg"
-	image_counts = 56
-	# path = "dlfornlp/lec08.ipynb"
-	path = "zbml/lec05-lr.ipynb"
-	qiniu_images = generate_image_list(qiniu_base_link, image_counts)
+	if len(sys.argv) != 4:
+		print "Three args: course name, lec number, pdf pages"
+		exit(1)
+
+	course, lec_number, image_counts = sys.argv[1:]
+
+	link, path = gen_info(course, int(lec_number))
+	qiniu_images = generate_image_list(link, int(image_counts))
 	cells = create_markdown_cells(qiniu_images)
 	whole_str = gen_ipynb_str(cells)
 	if not os.path.isfile(path):
 		output(path, whole_str)
 	else:
 		print "File exists! Not writing file! Check the output path first!"
-
