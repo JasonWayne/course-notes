@@ -81,7 +81,15 @@ def output(path, s):
 
 
 def gen_info(course, lec_number):
-	courses = set(["mlfoundations", "zbml", "dlfornlp", "cs231n", "coursera-ng"])
+	courses = {
+		        "foundations-lxt",
+		        "techniques-lxt",
+		        "ml-zb",
+		        "nlp-socher",
+		        "cnn-karpathy",
+		        "ml-ng",
+		        "nn-hinton"
+	}
 	if course not in courses:
 		print "Not a valid course name"
 		exit(1)
