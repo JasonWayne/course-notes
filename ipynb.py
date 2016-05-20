@@ -90,7 +90,8 @@ def gen_info(course, lec_number):
 		        "ml-ng",
 		        "nn-hinton"
 		        "dl-waterloo",
-		        "ml-april"
+		        "ml-april",
+		        "dl-may"
 	}
 	if course not in courses:
 		print "Not a valid course name"
